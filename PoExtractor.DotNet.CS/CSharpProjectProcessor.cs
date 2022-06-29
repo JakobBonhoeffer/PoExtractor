@@ -12,8 +12,8 @@ namespace PoExtractor.DotNet.CS {
     /// <summary>
     /// Extracts localizable strings from all *.cs files in the project path
     /// </summary>
-    public class CSharpProjectProcessor : RazorViewsProcessor 
-    {
+    public class CSharpProjectProcessor : RazorViewsProcessor {
+
         private readonly string identifier;
 
         public CSharpProjectProcessor(string identifier)
@@ -31,7 +31,8 @@ namespace PoExtractor.DotNet.CS {
                         new DisplayAttributeDescriptionStringExtractor(codeMetadataProvider),
                         new DisplayAttributeNameStringExtractor(codeMetadataProvider),
                         new DisplayAttributeGroupNameStringExtractor(codeMetadataProvider),
-                        new DisplayAttributeShortNameStringExtractor(codeMetadataProvider)
+                        new DisplayAttributeShortNameStringExtractor(codeMetadataProvider),
+                        new DescriptionAttributeStringExtractor(codeMetadataProvider)
                 }, strings);
 
             foreach (var file in Directory.EnumerateFiles(path, "*.cs", SearchOption.AllDirectories).OrderBy(file => file)) {
@@ -60,7 +61,8 @@ namespace PoExtractor.DotNet.CS {
                 new DisplayAttributeDescriptionStringExtractor(razorMetadataProvider),
                 new DisplayAttributeNameStringExtractor(razorMetadataProvider),
                 new DisplayAttributeGroupNameStringExtractor(razorMetadataProvider),
-                new DisplayAttributeShortNameStringExtractor(razorMetadataProvider)
+                new DisplayAttributeShortNameStringExtractor(razorMetadataProvider),
+                new DescriptionAttributeStringExtractor(razorMetadataProvider)
             };
     }
 }
