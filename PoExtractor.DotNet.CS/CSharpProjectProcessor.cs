@@ -13,17 +13,26 @@ namespace PoExtractor.DotNet.CS {
     /// Extracts localizable strings from all *.cs files in the project path
     /// </summary>
     public class CSharpProjectProcessor : RazorViewsProcessor {
+
+        private readonly string identifier;
+
+        public CSharpProjectProcessor(string identifier)
+        {
+            this.identifier = identifier;
+        }
+
         public override void Process(string path, string basePath, LocalizableStringCollection strings) {
             var codeMetadataProvider = new CodeMetadataProvider(basePath);
             var csharpWalker = new ExtractingCodeWalker(
                 new IStringExtractor<SyntaxNode>[] {
-                        new SingularStringExtractor(codeMetadataProvider),
-                        new PluralStringExtractor(codeMetadataProvider),
+                        new SingularStringExtractor(codeMetadataProvider, identifier),
+                        new PluralStringExtractor(codeMetadataProvider, identifier),
                         new ErrorMessageAnnotationStringExtractor(codeMetadataProvider),
                         new DisplayAttributeDescriptionStringExtractor(codeMetadataProvider),
                         new DisplayAttributeNameStringExtractor(codeMetadataProvider),
                         new DisplayAttributeGroupNameStringExtractor(codeMetadataProvider),
-                        new DisplayAttributeShortNameStringExtractor(codeMetadataProvider)
+                        new DisplayAttributeShortNameStringExtractor(codeMetadataProvider),
+                        new DescriptionAttributeStringExtractor(codeMetadataProvider)
                 }, strings);
 
             foreach (var file in Directory.EnumerateFiles(path, "*.cs", SearchOption.AllDirectories).OrderBy(file => file)) {
@@ -46,13 +55,14 @@ namespace PoExtractor.DotNet.CS {
         protected override IStringExtractor<SyntaxNode>[] GetStringExtractors(RazorMetadataProvider razorMetadataProvider)
             => new IStringExtractor<SyntaxNode>[]
             {
-                new SingularStringExtractor(razorMetadataProvider),
-                new PluralStringExtractor(razorMetadataProvider),
+                new SingularStringExtractor(razorMetadataProvider, identifier),
+                new PluralStringExtractor(razorMetadataProvider, identifier),
                 new ErrorMessageAnnotationStringExtractor(razorMetadataProvider),
                 new DisplayAttributeDescriptionStringExtractor(razorMetadataProvider),
                 new DisplayAttributeNameStringExtractor(razorMetadataProvider),
                 new DisplayAttributeGroupNameStringExtractor(razorMetadataProvider),
-                new DisplayAttributeShortNameStringExtractor(razorMetadataProvider)
+                new DisplayAttributeShortNameStringExtractor(razorMetadataProvider),
+                new DescriptionAttributeStringExtractor(razorMetadataProvider)
             };
     }
 }

@@ -17,6 +17,7 @@ namespace PoExtractor {
 
             var basePath = args[0];
             var outputBasePath = args[1];
+            var identifier = args[2];
 
             string[] projectFiles;
             if (Directory.Exists(basePath)) {
@@ -28,8 +29,8 @@ namespace PoExtractor {
             }
 
             var processors = new IProjectProcessor[] {
-                new CSharpProjectProcessor(),
-                new VisualBasicProjectProcessor()
+                new CSharpProjectProcessor(identifier),
+                new VisualBasicProjectProcessor(identifier)
             };
 
             foreach (var projectFilePath in projectFiles) {
@@ -59,6 +60,7 @@ namespace PoExtractor {
             Console.WriteLine("Usage: extractpo input output");
             Console.WriteLine("    input: path to the input directory, all projects at the the path will be processed");
             Console.WriteLine("    output: path to a directory where POT files will be generated");
+            Console.WriteLine("    identifier: The identifier of the IStringLocalizer to get the strings of");
         }
     }
 }
