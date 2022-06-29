@@ -60,6 +60,7 @@ namespace PoExtractor {
             Console.WriteLine("Usage: extractpo input output");
             Console.WriteLine("    input: path to the input directory, all projects at the the path will be processed");
             Console.WriteLine("    output: path to a directory where POT files will be generated");
+            Console.WriteLine("    identifier: The identifier of the IStringLocalizer to get the strings of");
         }
     }
 }
