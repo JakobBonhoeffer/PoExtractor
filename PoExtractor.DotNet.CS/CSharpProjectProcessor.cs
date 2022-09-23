@@ -8,11 +8,13 @@ using PoExtractor.DotNet.CS.MetadataProviders;
 using PoExtractor.Razor;
 using PoExtractor.Razor.MetadataProviders;
 
-namespace PoExtractor.DotNet.CS {
+namespace PoExtractor.DotNet.CS
+{
     /// <summary>
     /// Extracts localizable strings from all *.cs files in the project path
     /// </summary>
-    public class CSharpProjectProcessor : RazorViewsProcessor {
+    public class CSharpProjectProcessor : RazorViewsProcessor
+    {
 
         private readonly string identifier;
 
@@ -21,7 +23,8 @@ namespace PoExtractor.DotNet.CS {
             this.identifier = identifier;
         }
 
-        public override void Process(string path, string basePath, LocalizableStringCollection strings) {
+        public override void Process(string path, string basePath, LocalizableStringCollection strings)
+        {
             var codeMetadataProvider = new CodeMetadataProvider(basePath);
             var csharpWalker = new ExtractingCodeWalker(
                 new IStringExtractor<SyntaxNode>[] {
@@ -32,16 +35,21 @@ namespace PoExtractor.DotNet.CS {
                         new DisplayAttributeNameStringExtractor(codeMetadataProvider),
                         new DisplayAttributeGroupNameStringExtractor(codeMetadataProvider),
                         new DisplayAttributeShortNameStringExtractor(codeMetadataProvider),
-                        new DescriptionAttributeStringExtractor(codeMetadataProvider)
+                        new DescriptionAttributeStringExtractor(codeMetadataProvider),
+                        new TranslatableAttributeStringExtractor(codeMetadataProvider)
                 }, strings);
 
-            foreach (var file in Directory.EnumerateFiles(path, "*.cs", SearchOption.AllDirectories).OrderBy(file => file)) {
-                if (Path.GetFileName(file).EndsWith(".cshtml.g.cs")) {
+            foreach (var file in Directory.EnumerateFiles(path, "*.cs", SearchOption.AllDirectories).OrderBy(file => file))
+            {
+                if (Path.GetFileName(file).EndsWith(".cshtml.g.cs"))
+                {
                     continue;
                 }
 
-                using (var stream = File.OpenRead(file)) {
-                    using (var reader = new StreamReader(stream)) {
+                using (var stream = File.OpenRead(file))
+                {
+                    using (var reader = new StreamReader(stream))
+                    {
                         var syntaxTree = CSharpSyntaxTree.ParseText(reader.ReadToEnd(), path: file);
 
                         csharpWalker.Visit(syntaxTree.GetRoot());
@@ -62,7 +70,8 @@ namespace PoExtractor.DotNet.CS {
                 new DisplayAttributeNameStringExtractor(razorMetadataProvider),
                 new DisplayAttributeGroupNameStringExtractor(razorMetadataProvider),
                 new DisplayAttributeShortNameStringExtractor(razorMetadataProvider),
-                new DescriptionAttributeStringExtractor(razorMetadataProvider)
+                new DescriptionAttributeStringExtractor(razorMetadataProvider),
+                new TranslatableAttributeStringExtractor(razorMetadataProvider)
             };
     }
 }
