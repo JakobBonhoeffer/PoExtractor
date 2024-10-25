@@ -2,7 +2,7 @@
   "profiles": {
     "PoExtractor": {
       "commandName": "Project",
-      "commandLineArgs": "C:\\Projects\\Roma\\ROMA-Portal\\src\\client\\Roma.Portal.Client C:\\Temp\\PotFiles Loc"
+      "commandLineArgs": "C:\\Projects\\ROMA\\ROMA-Portal\\src\\shared\\Roma.Portal.Shared C:\\Temp\\PotFiles Loc"
     }
   }
 }
